@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakura Market - Membership Card Hub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Noto+Serif+JP:wght@700;900&family=Cinzel:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Hind Siliguri', 'Noto Serif JP', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      gap: 25px;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      width: 100%;
+      max-width: 650px;
+    }
+
+    .panel {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      padding: 20px 24px;
+      border-radius: 12px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      color: #f5b82e;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .input-group label {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .input-group input {
+      background: #111;
+      border: 1px solid #444;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border-color: #f5b82e;
+    }
+
+    .input-group input[readonly] {
+      color: #f5b82e;
+      font-weight: bold;
+      background: #181818;
+    }
+
+    .btn {
+      background: #7a0c23;
+      color: #fff;
+      border: 1px solid #f5b82e;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 42px;
+    }
+
+    .btn:hover {
+      background: #96122e;
+    }
+
+    .btn-green {
+      background: #1b4d3e;
+      border-color: #2ecc71;
+    }
+    .btn-green:hover {
+      background: #246552;
+    }
+
+    .btn-reload {
+      background: #2c3e50;
+      border-color: #34495e;
+      padding: 0 14px;
+      font-size: 1.1rem;
+    }
+    .btn-reload:hover {
+      background: #34495e;
+    }
+
+    /* CARD STYLING (Standard Proportion 620px x 370px) */
+    .card-frame {
+      width: 620px;
+      height: 370px;
+      background: linear-gradient(135deg, #420613 0%, #680d23 50%, #35030e 100%);
+      border: 4px solid #f5b82e;
+      border-radius: 14px;
+      padding: 18px 22px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+    }
+
+    .card-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(245, 184, 46, 0.3);
+      padding-bottom: 8px;
+      z-index: 1;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .kanji-seal {
+      width: 42px;
+      height: 42px;
+      background: #f5b82e;
+      color: #38040f;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      border: 2px dashed #38040f;
+    }
+
+    .shop-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shop-title-bn {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .shop-title-jp {
+      font-size: 0.7rem;
+      color: #ffd0e0;
+      letter-spacing: 2px;
+    }
+
+    .serial-badge {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid #f5b82e;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #f5b82e;
+      font-weight: bold;
+    }
+
+    .member-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      border-left: 3px solid #f5b82e;
+      z-index: 1;
+    }
+
+    .member-name-val {
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .rule-text {
+      font-size: 0.75rem;
+      color: #ffd0e0;
+    }
+
+    /* 20 STAMP BOXES GRID */
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 7px;
+      z-index: 1;
+    }
+
+    .stamp-box {
+      width: 46px;
+      height: 46px;
+      border: 1.5px dashed rgba(245, 184, 46, 0.6);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .stamp-box.milestone-5, .stamp-box.milestone-10 {
+      border-color: #f5b82e;
+      border-style: solid;
+      background: rgba(245, 184, 46, 0.15);
+    }
+
+    .stamp-box.milestone-20 {
+      border-color: #2ecc71;
+      border-style: solid;
+      background: rgba(46, 204, 113, 0.2);
+    }
+
+    .stamp-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .stamp-kanji {
+      font-size: 0.45rem;
+      color: #ffd0e0;
+      margin-top: -2px;
+    }
+
+    .star-icon {
+      font-size: 0.6rem;
+      color: #f5b82e;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #e0e0e0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 6px;
+      z-index: 1;
+    }
+
+    .reward-banner {
+      color: #f5b82e;
+      font-weight: 700;
+    }
+
+    #loadingStatus {
+      font-size: 0.85rem;
+      color: #f5b82e;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    @media print {
+      .panel { display: none; }
+      body { background: #fff; padding: 0; }
+      .card-frame { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- FAST ISSUANCE & RELOADABLE ID PANEL -->
+    <div class="panel">
+      <div class="panel-title">⚡ Fast Member Registration & ID Generator</div>
+      
+      <div class="input-row">
+        <div class="input-group" style="flex: 2;">
+          <label>Member Name (সদস্যের নাম):</label>
+          <input type="text" id="nameInput" placeholder="Enter customer name..." oninput="updateCard()" autofocus>
+        </div>
+        <div class="input-group" style="flex: 1.2;">
+          <label>Card ID:</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="serialInput" readonly style="flex: 1;">
+            <button class="btn btn-reload" onclick="generateNewID()" title="Generate New ID">🔄</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <button class="btn btn-green" onclick="saveAndNext()" style="flex:2;">💾 Register & Save to Sheet</button>
+        <button class="btn" onclick="window.print()" style="flex:1;">🖨️ Print Card</button>
+      </div>
+      
+      <div id="loadingStatus"></div>
+    </div>
+
+    <!-- MEMBER VERIFICATION SEARCH PANEL -->
+    <div class="panel">
+      <div class="panel-title">🔍 Quick Member Verification</div>
+      <div class="input-row">
+        <div class="input-group">
+          <input type="text" id="searchKey" placeholder="Search by Name or ID number...">
+        </div>
+        <button class="btn" onclick="findMember()">Search</button>
+      </div>
+    </div>
+
+    <!-- PRINTABLE MEMBERSHIP CARD -->
+    <div class="card-frame" id="membershipCard">
+      <div class="card-header">
+        <div class="brand-left">
+          <div class="kanji-seal">咲</div>
+          <div class="shop-title-group">
+            <div class="shop-title-bn">সাকুরা মার্কেট</div>
+            <div class="shop-title-jp">サクラマーケット • MEMBER STAMP CARD</div>
+          </div>
+        </div>
+        <div class="serial-badge" id="cardSerial">SKR-2026-1001</div>
+      </div>
+
+      <div class="member-bar">
+        <div>নাম (Name): <span class="member-name-val" id="cardName">...................</span></div>
+        <div class="rule-text">৳৩০০ কেনাকাটা = ১টি স্ট্যাম্প</div>
+      </div>
+
+      <!-- 20 Stamp Boxes -->
+      <div class="stamp-grid">
+        <div class="stamp-box"><span class="stamp-num">১</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">২</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">৩</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">৪</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box milestone-5"><span class="stamp-num">৫</span><span class="star-icon">★</span></div>
+        <div class="stamp-box"><span class="stamp-num">৬</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">৭</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">৮</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">৯</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box milestone-10"><span class="stamp-num">১০</span><span class="star-icon">★</span></div>
+        
+        <div class="stamp-box"><span class="stamp-num">১১</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১২</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৩</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৪</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৫</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৬</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৭</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৮</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box"><span class="stamp-num">১৯</span><span class="stamp-kanji">印</span></div>
+        <div class="stamp-box milestone-20"><span class="stamp-num">২০</span><span class="star-icon">🎁</span></div>
+      </div>
+
+      <div class="card-footer">
+        <div class="reward-banner">🎁 ২০টি স্ট্যাম্প পূরণে ১ কেজি ফ্রি চিনি বা ৳১২০ ক্যাশব্যাক!</div>
+        <div>📞 +8801789504376</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycby5iFAv9GFTsNhUXKXgBvQILCxM3vT56-wYDI1iEsr3-yYnw_Q1HVhm7Kx3V33PyJHAeQ/exec";
+
+    window.onload = function() {
+      generateNewID();
+    };
+
+    function generateNewID() {
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const newID = "SKR-" + new Date().getFullYear().toString().slice(-2) + randomNum;
+      document.getElementById('serialInput').value = newID;
+      document.getElementById('cardSerial').innerText = newID;
+    }
+
+    function updateCard() {
+      const name = document.getElementById('nameInput').value || '...................';
+      document.getElementById('cardName').innerText = name;
+    }
+
+    async function saveAndNext() {
+      const idNumber = document.getElementById('serialInput').value.trim();
+      const name = document.getElementById('nameInput').value.trim();
+      const statusDiv = document.getElementById('loadingStatus');
+
+      if (!name) {
+        alert("⚠️ Please enter the customer's name first.");
+        document.getElementById('nameInput').focus();
+        return;
+      }
+
+      statusDiv.innerText = "⏳ Saving to Google Sheet...";
+
+      try {
+        const payload = { idNumber, name };
+        const response = await fetch(SPREADSHEET_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        if (result.result === "success") {
+          statusDiv.innerText = `✅ Saved! ID ${idNumber} registered for ${name}.`;
+          
+          setTimeout(() => {
+            document.getElementById('nameInput').value = "";
+            document.getElementById('cardName').innerText = "...................";
+            generateNewID();
+            statusDiv.innerText = "⚡ Ready for next customer!";
+            document.getElementById('nameInput').focus();
+          }, 1500);
+
+        } else {
+          statusDiv.innerText = "❌ Error: " + result.message;
+        }
+      } catch (error) {
+        console.error(error);
+        statusDiv.innerText = "❌ Connection error with Google Sheet.";
+      }
+    }
+
+    async function findMember() {
+      const searchKey = document.getElementById('searchKey').value.trim().toLowerCase();
+      const statusDiv = document.getElementById('loadingStatus');
+
+      if (!searchKey) {
+        alert("⚠️ Enter a Name or ID to search.");
+        return;
+      }
+
+      statusDiv.innerText = "🔍 Searching Google Sheet...";
+
+      try {
+        const response = await fetch(SPREADSHEET_API_URL);
+        const members = await response.json();
+
+        const found = members.find(m => 
+          String(m.idNumber).toLowerCase() === searchKey || 
+          String(m.name).toLowerCase().includes(searchKey)
+        );
+
+        if (found) {
+          statusDiv.innerText = `✅ Found! ID: ${found.idNumber} | Name: ${found.name}`;
+          document.getElementById('serialInput').value = found.idNumber;
+          document.getElementById('cardSerial').innerText = found.idNumber;
+          document.getElementById('nameInput').value = found.name;
+          updateCard();
+        } else {
+          statusDiv.innerText = "⚠️ No matching member found in Google Sheet.";
+        }
+      } catch (error) {
+        console.error(error);
+        statusDiv.innerText = "❌ Error retrieving records from Sheet.";
+      }
+    }
+  </script>
+
+</body>
+</html>
