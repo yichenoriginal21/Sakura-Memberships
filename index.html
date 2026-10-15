@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sakura Market - Membership Card Hub</title>
+  <!-- Include html2canvas for card PNG export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Noto+Serif+JP:wght@700;900&family=Cinzel:wght@700&display=swap');
 
@@ -310,12 +312,6 @@
       text-align: center;
       min-height: 20px;
     }
-
-    @media print {
-      .panel { display: none; }
-      body { background: #fff; padding: 0; }
-      .card-frame { box-shadow: none; }
-    }
   </style>
 </head>
 <body>
@@ -341,8 +337,7 @@
       </div>
 
       <div class="input-row">
-        <button class="btn btn-green" onclick="saveAndNext()" style="flex:2;">💾 Register & Save to Sheet</button>
-        <button class="btn" onclick="window.print()" style="flex:1;">🖨️ Print Card</button>
+        <button class="btn btn-green" onclick="registerAndDownload()" style="width: 100%;">💾 Register & Download PNG</button>
       </div>
       
       <div id="loadingStatus"></div>
@@ -429,7 +424,7 @@
       document.getElementById('cardName').innerText = name;
     }
 
-    async function saveAndNext() {
+    async function registerAndDownload() {
       const idNumber = document.getElementById('serialInput').value.trim();
       const name = document.getElementById('nameInput').value.trim();
       const statusDiv = document.getElementById('loadingStatus');
@@ -440,9 +435,10 @@
         return;
       }
 
-      statusDiv.innerText = "⏳ Saving to Google Sheet...";
+      statusDiv.innerText = "⏳ Saving to Google Sheet & Generating PNG...";
 
       try {
+        // 1. Save to Google Sheet
         const payload = { idNumber, name };
         const response = await fetch(SPREADSHEET_API_URL, {
           method: "POST",
@@ -452,8 +448,21 @@
 
         const result = await response.json();
         if (result.result === "success") {
-          statusDiv.innerText = `✅ Saved! ID ${idNumber} registered for ${name}.`;
+          statusDiv.innerText = `✅ Registered! Downloading card PNG...`;
+
+          // 2. Automatically generate and download card as PNG
+          const cardElement = document.getElementById('membershipCard');
+          const canvas = await html2canvas(cardElement, { scale: 2, useCORS: true });
+          const imageURI = canvas.toDataURL('image/png');
           
+          const link = document.createElement('a');
+          link.download = `Sakura_Membership_${idNumber}.png`;
+          link.href = imageURI;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          // 3. Reset for next customer
           setTimeout(() => {
             document.getElementById('nameInput').value = "";
             document.getElementById('cardName').innerText = "...................";
