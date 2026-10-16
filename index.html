@@ -54,7 +54,7 @@
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
     }
 
     .input-row {
@@ -110,6 +110,7 @@
       justify-content: center;
       gap: 6px;
       height: 42px;
+      flex: 1;
     }
 
     .btn:hover {
@@ -124,11 +125,20 @@
       background: #246552;
     }
 
+    .btn-print {
+      background: #1d4ed8;
+      border-color: #60a5fa;
+    }
+    .btn-print:hover {
+      background: #1e40af;
+    }
+
     .btn-reload {
       background: #2c3e50;
       border-color: #34495e;
       padding: 0 14px;
       font-size: 1.1rem;
+      flex: none;
     }
     .btn-reload:hover {
       background: #34495e;
@@ -312,6 +322,25 @@
       text-align: center;
       min-height: 20px;
     }
+
+    /* PRINT STYLING SPECIFIC FOR OFFLINE PRINTERS */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #membershipCard, #membershipCard * {
+        visibility: visible;
+      }
+      #membershipCard {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: scale(1);
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
   </style>
 </head>
 <body>
@@ -320,7 +349,10 @@
     
     <!-- FAST ISSUANCE & RELOADABLE ID PANEL -->
     <div class="panel">
-      <div class="panel-title">⚡ Fast Member Registration & ID Generator</div>
+      <div class="panel-title">
+        <span>⚡ Fast Member Registration & ID Generator</span>
+        <span id="syncStatusBadge" style="font-size: 0.75rem; color: #4ade80;">🟢 অনলাইন</span>
+      </div>
       
       <div class="input-row">
         <div class="input-group" style="flex: 2;">
@@ -337,7 +369,8 @@
       </div>
 
       <div class="input-row">
-        <button class="btn btn-green" onclick="registerAndDownload()" style="width: 100%;">💾 Register & Download PNG</button>
+        <button class="btn btn-green" onclick="registerAndDownload()">💾 Save & PNG</button>
+        <button class="btn btn-print" onclick="printCard()">🖨️ Print Card</button>
       </div>
       
       <div id="loadingStatus"></div>
@@ -350,7 +383,7 @@
         <div class="input-group">
           <input type="text" id="searchKey" placeholder="Search by Name or ID number...">
         </div>
-        <button class="btn" onclick="findMember()">Search</button>
+        <button class="btn" onclick="findMember()" style="flex: none; width: 100px;">Search</button>
       </div>
     </div>
 
@@ -406,11 +439,35 @@
   </div>
 
   <script>
+    // Register Service Worker for Offline PWA Access
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('ServiceWorker offline ready!', reg))
+          .catch((err) => console.log('ServiceWorker registration failed', err));
+      });
+    }
+
     const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycby5iFAv9GFTsNhUXKXgBvQILCxM3vT56-wYDI1iEsr3-yYnw_Q1HVhm7Kx3V33PyJHAeQ/exec";
 
     window.onload = function() {
       generateNewID();
+      checkNetworkStatus();
+      window.addEventListener('online', syncOfflineMembers);
+      window.addEventListener('offline', checkNetworkStatus);
     };
+
+    function checkNetworkStatus() {
+      const badge = document.getElementById('syncStatusBadge');
+      if (navigator.onLine) {
+        badge.innerText = "🟢 অনলাইন";
+        badge.style.color = "#4ade80";
+        syncOfflineMembers();
+      } else {
+        badge.innerText = "🔴 অফলাইন মোড";
+        badge.style.color = "#f87171";
+      }
+    }
 
     function generateNewID() {
       const randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -424,6 +481,16 @@
       document.getElementById('cardName').innerText = name;
     }
 
+    function printCard() {
+      const name = document.getElementById('nameInput').value.trim();
+      if (!name) {
+        alert("⚠️ Please enter customer's name before printing.");
+        document.getElementById('nameInput').focus();
+        return;
+      }
+      window.print();
+    }
+
     async function registerAndDownload() {
       const idNumber = document.getElementById('serialInput').value.trim();
       const name = document.getElementById('nameInput').value.trim();
@@ -435,48 +502,89 @@
         return;
       }
 
-      statusDiv.innerText = "⏳ Saving to Google Sheet & Generating PNG...";
+      statusDiv.innerText = "⏳ Generating Membership Card PNG...";
 
       try {
-        // 1. Save to Google Sheet
+        const cardElement = document.getElementById('membershipCard');
+        const canvas = await html2canvas(cardElement, { scale: 2, useCORS: true });
+        const imageURI = canvas.toDataURL('image/png');
+        
+        const link = document.createElement('a');
+        link.download = `Sakura_Membership_${idNumber}.png`;
+        link.href = imageURI;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
         const payload = { idNumber, name };
-        const response = await fetch(SPREADSHEET_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
 
-        const result = await response.json();
-        if (result.result === "success") {
-          statusDiv.innerText = `✅ Registered! Downloading card PNG...`;
-
-          // 2. Automatically generate and download card as PNG
-          const cardElement = document.getElementById('membershipCard');
-          const canvas = await html2canvas(cardElement, { scale: 2, useCORS: true });
-          const imageURI = canvas.toDataURL('image/png');
-          
-          const link = document.createElement('a');
-          link.download = `Sakura_Membership_${idNumber}.png`;
-          link.href = imageURI;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          // 3. Reset for next customer
-          setTimeout(() => {
-            document.getElementById('nameInput').value = "";
-            document.getElementById('cardName').innerText = "...................";
-            generateNewID();
-            statusDiv.innerText = "⚡ Ready for next customer!";
-            document.getElementById('nameInput').focus();
-          }, 1500);
-
+        if (navigator.onLine) {
+          statusDiv.innerText = "🌐 Saving to Google Sheet...";
+          const response = await fetch(SPREADSHEET_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+          const result = await response.json();
+          if (result.result === "success") {
+            statusDiv.innerText = `✅ Registered & Synced Online! Card downloaded.`;
+          } else {
+            statusDiv.innerText = `⚠️ Downloaded, but sheet warning: ${result.message}`;
+          }
         } else {
-          statusDiv.innerText = "❌ Error: " + result.message;
+          saveOfflineMember(payload);
+          statusDiv.innerText = `💾 Saved Offline! Will auto-sync when internet returns. Card downloaded.`;
         }
+
+        setTimeout(() => {
+          document.getElementById('nameInput').value = "";
+          document.getElementById('cardName').innerText = "...................";
+          generateNewID();
+          if (navigator.onLine) statusDiv.innerText = "⚡ Ready for next customer!";
+        }, 2000);
+
       } catch (error) {
         console.error(error);
-        statusDiv.innerText = "❌ Connection error with Google Sheet.";
+        statusDiv.innerText = "❌ Error processing card generation.";
+      }
+    }
+
+    function saveOfflineMember(memberData) {
+      const queue = JSON.parse(localStorage.getItem('sakura_membership_offline_queue') || '[]');
+      queue.push(memberData);
+      localStorage.setItem('sakura_membership_offline_queue', JSON.stringify(queue));
+    }
+
+    async function syncOfflineMembers() {
+      const queue = JSON.parse(localStorage.getItem('sakura_membership_offline_queue') || '[]');
+      if (queue.length > 0 && navigator.onLine) {
+        const statusDiv = document.getElementById('loadingStatus');
+        statusDiv.innerText = `🔄 Syncing ${queue.length} offline members to Google Sheet...`;
+        
+        let remainingQueue = [];
+        for (const member of queue) {
+          try {
+            const response = await fetch(SPREADSHEET_API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(member)
+            });
+            const result = await response.json();
+            if (result.result !== "success") {
+              remainingQueue.push(member);
+            }
+          } catch (err) {
+            console.error("Sync failed for item:", member, err);
+            remainingQueue.push(member);
+          }
+        }
+        
+        localStorage.setItem('sakura_membership_offline_queue', JSON.stringify(remainingQueue));
+        if (remainingQueue.length === 0) {
+          statusDiv.innerText = "✅ All offline members successfully synced!";
+        } else {
+          statusDiv.innerText = `⚠️ Synced with some items remaining in queue.`;
+        }
       }
     }
 
@@ -489,29 +597,48 @@
         return;
       }
 
-      statusDiv.innerText = "🔍 Searching Google Sheet...";
+      statusDiv.innerText = "🔍 Searching records...";
 
-      try {
-        const response = await fetch(SPREADSHEET_API_URL);
-        const members = await response.json();
+      const offlineQueue = JSON.parse(localStorage.getItem('sakura_membership_offline_queue') || '[]');
+      const localFound = offlineQueue.find(m => 
+        String(m.idNumber).toLowerCase() === searchKey || 
+        String(m.name).toLowerCase().includes(searchKey)
+      );
 
-        const found = members.find(m => 
-          String(m.idNumber).toLowerCase() === searchKey || 
-          String(m.name).toLowerCase().includes(searchKey)
-        );
+      if (localFound) {
+        statusDiv.innerText = `✅ Found Offline Queue! ID: ${localFound.idNumber} | Name: ${localFound.name}`;
+        document.getElementById('serialInput').value = localFound.idNumber;
+        document.getElementById('cardSerial').innerText = localFound.idNumber;
+        document.getElementById('nameInput').value = localFound.name;
+        updateCard();
+        return;
+      }
 
-        if (found) {
-          statusDiv.innerText = `✅ Found! ID: ${found.idNumber} | Name: ${found.name}`;
-          document.getElementById('serialInput').value = found.idNumber;
-          document.getElementById('cardSerial').innerText = found.idNumber;
-          document.getElementById('nameInput').value = found.name;
-          updateCard();
-        } else {
-          statusDiv.innerText = "⚠️ No matching member found in Google Sheet.";
+      if (navigator.onLine) {
+        try {
+          const response = await fetch(SPREADSHEET_API_URL);
+          const members = await response.json();
+
+          const found = members.find(m => 
+            String(m.idNumber).toLowerCase() === searchKey || 
+            String(m.name).toLowerCase().includes(searchKey)
+          );
+
+          if (found) {
+            statusDiv.innerText = `✅ Found in Sheet! ID: ${found.idNumber} | Name: ${found.name}`;
+            document.getElementById('serialInput').value = found.idNumber;
+            document.getElementById('cardSerial').innerText = found.idNumber;
+            document.getElementById('nameInput').value = found.name;
+            updateCard();
+          } else {
+            statusDiv.innerText = "⚠️ No matching member found.";
+          }
+        } catch (error) {
+          console.error(error);
+          statusDiv.innerText = "❌ Error retrieving records from Sheet.";
         }
-      } catch (error) {
-        console.error(error);
-        statusDiv.innerText = "❌ Error retrieving records from Sheet.";
+      } else {
+        statusDiv.innerText = "⚠️ Offline: Member not found in local pending queue.";
       }
     }
   </script>
