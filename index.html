@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakura Market - Membership Card Hub</title>
+  <title>Sakura Market - Membership Program & Card Hub</title>
   <!-- Include html2canvas for card PNG export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -144,14 +144,14 @@
       background: #34495e;
     }
 
-    /* CARD STYLING (Standard Proportion 620px x 370px) */
+    /* CARD STYLING (Standard Proportion 620px x 380px) */
     .card-frame {
       width: 620px;
-      height: 370px;
+      height: 380px;
       background: linear-gradient(135deg, #420613 0%, #680d23 50%, #35030e 100%);
       border: 4px solid #f5b82e;
       border-radius: 14px;
-      padding: 18px 22px;
+      padding: 16px 20px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
@@ -175,19 +175,19 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(245, 184, 46, 0.3);
-      padding-bottom: 8px;
+      padding-bottom: 6px;
       z-index: 1;
     }
 
     .brand-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .kanji-seal {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       background: #f5b82e;
       color: #38040f;
       border-radius: 50%;
@@ -195,7 +195,7 @@
       justify-content: center;
       align-items: center;
       font-family: 'Noto Serif JP', serif;
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 900;
       border: 2px dashed #38040f;
     }
@@ -206,14 +206,14 @@
     }
 
     .shop-title-bn {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.1;
     }
 
     .shop-title-jp {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #ffd0e0;
       letter-spacing: 2px;
     }
@@ -221,10 +221,10 @@
     .serial-badge {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid #f5b82e;
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
       font-family: monospace;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #f5b82e;
       font-weight: bold;
     }
@@ -234,9 +234,9 @@
       justify-content: space-between;
       align-items: center;
       background: rgba(0, 0, 0, 0.3);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       border-left: 3px solid #f5b82e;
       z-index: 1;
     }
@@ -247,7 +247,7 @@
     }
 
     .rule-text {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #ffd0e0;
     }
 
@@ -255,13 +255,13 @@
     .stamp-grid {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
-      gap: 7px;
+      gap: 6px;
       z-index: 1;
     }
 
     .stamp-box {
-      width: 46px;
-      height: 46px;
+      width: 44px;
+      height: 42px;
       border: 1.5px dashed rgba(245, 184, 46, 0.6);
       border-radius: 50%;
       display: flex;
@@ -284,19 +284,19 @@
     }
 
     .stamp-num {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #ffffff;
     }
 
     .stamp-kanji {
-      font-size: 0.45rem;
+      font-size: 0.4rem;
       color: #ffd0e0;
       margin-top: -2px;
     }
 
     .star-icon {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       color: #f5b82e;
     }
 
@@ -304,10 +304,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #e0e0e0;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 6px;
+      padding-top: 5px;
       z-index: 1;
     }
 
@@ -323,7 +323,7 @@
       min-height: 20px;
     }
 
-    /* PRINT STYLING SPECIFIC FOR OFFLINE PRINTERS */
+    /* PRINT STYLING */
     @media print {
       body * {
         visibility: hidden;
@@ -347,20 +347,20 @@
 
   <div class="app-container">
     
-    <!-- FAST ISSUANCE & RELOADABLE ID PANEL -->
+    <!-- FAST ISSUANCE & POLICY CONFIG PANEL -->
     <div class="panel">
       <div class="panel-title">
-        <span>⚡ Fast Member Registration & ID Generator</span>
+        <span>🌸 সাকুরা মার্কেট - মেম্বারশিপ ও পয়েন্ট সিস্টেম</span>
         <span id="syncStatusBadge" style="font-size: 0.75rem; color: #4ade80;">🟢 অনলাইন</span>
       </div>
       
       <div class="input-row">
         <div class="input-group" style="flex: 2;">
-          <label>Member Name (সদস্যের নাম):</label>
-          <input type="text" id="nameInput" placeholder="Enter customer name..." oninput="updateCard()" autofocus>
+          <label>সদস্যের নাম (Member Name):</label>
+          <input type="text" id="nameInput" placeholder="সদস্যের নাম লিখুন..." oninput="updateCard()" autofocus>
         </div>
         <div class="input-group" style="flex: 1.2;">
-          <label>Card ID:</label>
+          <label>মেম্বার আইডি (Card ID):</label>
           <div style="display: flex; gap: 5px;">
             <input type="text" id="serialInput" readonly style="flex: 1;">
             <button class="btn btn-reload" onclick="generateNewID()" title="Generate New ID">🔄</button>
@@ -369,8 +369,20 @@
       </div>
 
       <div class="input-row">
-        <button class="btn btn-green" onclick="registerAndDownload()">💾 Save & PNG</button>
-        <button class="btn btn-print" onclick="printCard()">🖨️ Print Card</button>
+        <div class="input-group">
+          <label>রেফারেন্স আইডি (যদি থাকে - +৫ বোনাস স্ট্যাম্প):</label>
+          <input type="text" id="referrerInput" placeholder="যেমন: SKR-264266">
+        </div>
+      </div>
+
+      <!-- Policy Info Summary Box -->
+      <div style="background: rgba(245, 184, 46, 0.08); border: 1px dashed #f5b82e; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: #f3f4f6;">
+        📌 <b>নীতিমালা:</b> ফি ৳১৫ (আজীবন মেয়াদ) | হারানো কার্ড রিপ্লেসমেন্ট ৳২০ | ২০ ভিজিট = এক্সক্লুসিভ ডিসকাউন্ট | ৳৫০০ কেনাকাটা = ১ পয়েন্ট (১ পয়েন্ট = ৳১)।
+      </div>
+
+      <div class="input-row">
+        <button class="btn btn-green" onclick="registerAndDownload()">💾 মেম্বার রেজিস্টার ও PNG ডাউনলোড</button>
+        <button class="btn btn-print" onclick="printCard()">🖨️ কার্ড প্রিন্ট করুন</button>
       </div>
       
       <div id="loadingStatus"></div>
@@ -378,12 +390,12 @@
 
     <!-- MEMBER VERIFICATION SEARCH PANEL -->
     <div class="panel">
-      <div class="panel-title">🔍 Quick Member Verification</div>
+      <div class="panel-title">🔍 মেম্বার যাচাই ও অনুসন্ধান</div>
       <div class="input-row">
         <div class="input-group">
-          <input type="text" id="searchKey" placeholder="Search by Name or ID number...">
+          <input type="text" id="searchKey" placeholder="নাম বা আইডি নম্বর দিয়ে খুঁজুন...">
         </div>
-        <button class="btn" onclick="findMember()" style="flex: none; width: 100px;">Search</button>
+        <button class="btn" onclick="findMember()" style="flex: none; width: 100px;">খুঁজুন</button>
       </div>
     </div>
 
@@ -394,15 +406,15 @@
           <div class="kanji-seal">咲</div>
           <div class="shop-title-group">
             <div class="shop-title-bn">সাকুরা মার্কেট</div>
-            <div class="shop-title-jp">サクラマーケット • MEMBER STAMP CARD</div>
+            <div class="shop-title-jp">サクラマーケット • LIFETIME MEMBERSHIP</div>
           </div>
         </div>
-        <div class="serial-badge" id="cardSerial">SKR-2026-1001</div>
+        <div class="serial-badge" id="cardSerial">SKR-264266</div>
       </div>
 
       <div class="member-bar">
-        <div>নাম (Name): <span class="member-name-val" id="cardName">...................</span></div>
-        <div class="rule-text">৳৫০০ কেনাকাটা = ১টি স্ট্যাম্প</div>
+        <div>নাম: <span class="member-name-val" id="cardName">...................</span></div>
+        <div class="rule-text">ফি: ৳১৫ (আজীবন মেয়াদ)</div>
       </div>
 
       <!-- 20 Stamp Boxes -->
@@ -431,23 +443,14 @@
       </div>
 
       <div class="card-footer">
-        <div class="reward-banner">🎁 ২০টি স্ট্যাম্প পূরণে ৫০০ গ্রাম চিনি বা ৳১২০ ক্যাশব্যাক!</div>
-        <div>📞 +8801789504376</div>
+        <div class="reward-banner">🎯 ২০ ভিজিট = এক্সক্লুসিভ মেম্বার ডিসকাউন্ট আনলক!</div>
+        <div>📞 আম্বরখানা, সিলেট</div>
       </div>
     </div>
 
   </div>
 
   <script>
-    // Register Service Worker for Offline PWA Access
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then((reg) => console.log('ServiceWorker offline ready!', reg))
-          .catch((err) => console.log('ServiceWorker registration failed', err));
-      });
-    }
-
     const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycby5iFAv9GFTsNhUXKXgBvQILCxM3vT56-wYDI1iEsr3-yYnw_Q1HVhm7Kx3V33PyJHAeQ/exec";
 
     window.onload = function() {
@@ -470,8 +473,8 @@
     }
 
     function generateNewID() {
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const newID = "SKR-" + new Date().getFullYear().toString().slice(-2) + randomNum;
+      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      const newID = "SKR-" + randomNum;
       document.getElementById('serialInput').value = newID;
       document.getElementById('cardSerial').innerText = newID;
     }
@@ -484,7 +487,7 @@
     function printCard() {
       const name = document.getElementById('nameInput').value.trim();
       if (!name) {
-        alert("⚠️ Please enter customer's name before printing.");
+        alert("⚠️ প্রিন্ট করার আগে অনুগ্রহ করে সদস্যের নাম লিখুন।");
         document.getElementById('nameInput').focus();
         return;
       }
@@ -494,15 +497,16 @@
     async function registerAndDownload() {
       const idNumber = document.getElementById('serialInput').value.trim();
       const name = document.getElementById('nameInput').value.trim();
+      const referrerID = document.getElementById('referrerInput').value.trim();
       const statusDiv = document.getElementById('loadingStatus');
 
       if (!name) {
-        alert("⚠️ Please enter the customer's name first.");
+        alert("⚠️ অনুগ্রহ করে সদস্যের নাম লিখুন।");
         document.getElementById('nameInput').focus();
         return;
       }
 
-      statusDiv.innerText = "⏳ Generating Membership Card PNG...";
+      statusDiv.innerText = "⏳ মেম্বারশিপ কার্ড PNG তৈরি হচ্ছে...";
 
       try {
         const cardElement = document.getElementById('membershipCard');
@@ -516,10 +520,10 @@
         link.click();
         document.body.removeChild(link);
 
-        const payload = { idNumber, name };
+        const payload = { idNumber, name, referrerID };
 
         if (navigator.onLine) {
-          statusDiv.innerText = "🌐 Saving to Google Sheet...";
+          statusDiv.innerText = "🌐 গুগল শিটে ডেটা সেভ হচ্ছে...";
           const response = await fetch(SPREADSHEET_API_URL, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -527,25 +531,26 @@
           });
           const result = await response.json();
           if (result.result === "success") {
-            statusDiv.innerText = `✅ Registered & Synced Online! Card downloaded.`;
+            statusDiv.innerText = `✅ সফলভাবে রেজিস্টার্ড ও সিন্স হয়েছে! কার্ড ডাউনলোড সম্পন্ন।`;
           } else {
-            statusDiv.innerText = `⚠️ Downloaded, but sheet warning: ${result.message}`;
+            statusDiv.innerText = `⚠️ কার্ড ডাউনলোড হয়েছে, তবে শিট ওয়ার্নিং: ${result.message}`;
           }
         } else {
           saveOfflineMember(payload);
-          statusDiv.innerText = `💾 Saved Offline! Will auto-sync when internet returns. Card downloaded.`;
+          statusDiv.innerText = `💾 অফলাইনে সেভ হয়েছে! ইন্টারনেট সংযোগ পেলে অটো-সিন্স হবে। কার্ড ডাউনলোড সম্পন্ন।`;
         }
 
         setTimeout(() => {
           document.getElementById('nameInput').value = "";
+          document.getElementById('referrerInput').value = "";
           document.getElementById('cardName').innerText = "...................";
           generateNewID();
-          if (navigator.onLine) statusDiv.innerText = "⚡ Ready for next customer!";
-        }, 2000);
+          if (navigator.onLine) statusDiv.innerText = "⚡ পরবর্তী মেম্বারের জন্য প্রস্তুত!";
+        }, 2500);
 
       } catch (error) {
         console.error(error);
-        statusDiv.innerText = "❌ Error processing card generation.";
+        statusDiv.innerText = "❌ কার্ড প্রসেসিংয়ে ত্রুটি হয়েছে।";
       }
     }
 
@@ -559,7 +564,7 @@
       const queue = JSON.parse(localStorage.getItem('sakura_membership_offline_queue') || '[]');
       if (queue.length > 0 && navigator.onLine) {
         const statusDiv = document.getElementById('loadingStatus');
-        statusDiv.innerText = `🔄 Syncing ${queue.length} offline members to Google Sheet...`;
+        statusDiv.innerText = `🔄 অফলাইনের ${queue.length}টি মেম্বার রেকর্ড গুগল শিটে সিন্স করা হচ্ছে...`;
         
         let remainingQueue = [];
         for (const member of queue) {
@@ -574,16 +579,16 @@
               remainingQueue.push(member);
             }
           } catch (err) {
-            console.error("Sync failed for item:", member, err);
+            console.error("Sync failed:", member, err);
             remainingQueue.push(member);
           }
         }
         
         localStorage.setItem('sakura_membership_offline_queue', JSON.stringify(remainingQueue));
         if (remainingQueue.length === 0) {
-          statusDiv.innerText = "✅ All offline members successfully synced!";
+          statusDiv.innerText = "✅ অফলাইন মেম্বার ডেটা সফলভাবে সিন্স হয়েছে!";
         } else {
-          statusDiv.innerText = `⚠️ Synced with some items remaining in queue.`;
+          statusDiv.innerText = `⚠️ কিছু ডেটা সিন্স বাকি রয়েছে।`;
         }
       }
     }
@@ -593,11 +598,11 @@
       const statusDiv = document.getElementById('loadingStatus');
 
       if (!searchKey) {
-        alert("⚠️ Enter a Name or ID to search.");
+        alert("⚠️ অনুগ্রহ করে মেম্বার আইডি বা নাম লিখুন।");
         return;
       }
 
-      statusDiv.innerText = "🔍 Searching records...";
+      statusDiv.innerText = "🔍 রেকর্ড খোঁজা হচ্ছে...";
 
       const offlineQueue = JSON.parse(localStorage.getItem('sakura_membership_offline_queue') || '[]');
       const localFound = offlineQueue.find(m => 
@@ -606,7 +611,7 @@
       );
 
       if (localFound) {
-        statusDiv.innerText = `✅ Found Offline Queue! ID: ${localFound.idNumber} | Name: ${localFound.name}`;
+        statusDiv.innerText = `✅ অফলাইন কিউতে পাওয়া গেছে! আইডি: ${localFound.idNumber} | নাম: ${localFound.name}`;
         document.getElementById('serialInput').value = localFound.idNumber;
         document.getElementById('cardSerial').innerText = localFound.idNumber;
         document.getElementById('nameInput').value = localFound.name;
@@ -625,20 +630,20 @@
           );
 
           if (found) {
-            statusDiv.innerText = `✅ Found in Sheet! ID: ${found.idNumber} | Name: ${found.name}`;
+            statusDiv.innerText = `✅ শিটে পাওয়া গেছে! আইডি: ${found.idNumber} | নাম: ${found.name}`;
             document.getElementById('serialInput').value = found.idNumber;
             document.getElementById('cardSerial').innerText = found.idNumber;
             document.getElementById('nameInput').value = found.name;
             updateCard();
           } else {
-            statusDiv.innerText = "⚠️ No matching member found.";
+            statusDiv.innerText = "⚠️ কোনো মেম্বার পাওয়া যায়নি।";
           }
         } catch (error) {
           console.error(error);
-          statusDiv.innerText = "❌ Error retrieving records from Sheet.";
+          statusDiv.innerText = "❌ শিট থেকে ডেটা রিট্রিভ করতে সমস্যা হয়েছে।";
         }
       } else {
-        statusDiv.innerText = "⚠️ Offline: Member not found in local pending queue.";
+        statusDiv.innerText = "⚠️ অফলাইন মোড: লোকাল কিউতে মেম্বার পাওয়া যায়নি।";
       }
     }
   </script>
